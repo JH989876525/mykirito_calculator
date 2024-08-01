@@ -36,7 +36,7 @@ class character:
             effort = effort_point[index]
             if(dowhat == "workout"):
                 if (self.status[0] < self.status[6]*10):
-                    effort[status.index(max(status[1:8]))] = 4
+                    effort[self.status.index(max(self.status[1:8]))] = 4
                 else:
                     effort[0] = 4
             # add efforts
@@ -59,7 +59,7 @@ class character:
 
 
 val_base   = [ 25,  3,  2,  2,  3,  6,  2,  1,  1] # 基礎值
-val_start  = [350, 38, 33, 30, 25, 20, 32, 25, 20] # 初始值
+val_start  = [350, 38, 33, 30, 25, 20,132,225, 20] # 初始值
 val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121] # 額外值
 example    = [100, 10, 10, 10, 10, 10,102,104, 10]
 
@@ -67,6 +67,6 @@ kirito = character(val_base, val_start, val_extra)
 
 kirito.show() 
 
-kirito.action('hunting', 5)
+kirito.action('workout', 5)
 
 kirito.show() 
