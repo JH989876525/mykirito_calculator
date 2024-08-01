@@ -36,22 +36,24 @@ class character:
         self.status = status(base)
         self.extra = extra
         self.effort = [ 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    
-    def action(self, action, times):
-        for i in range(times):
-            print('aa')
 
     def show(self):
+        print("effort\t:", self.effort)
         print("status\t:", self.status.summary)
         print("extra\t:", self.extra)
         self.result = np.sum([self.status.summary, self.extra], axis = 0).tolist()
         print("summary\t:", self.result)
 
-list_base = [25,3,2,2,3,6,2,1,1]
-list_start = [350,38,33,30,25,20,32,25,20]
-list_extra = [ 0, 0, 0, 0, 0, 0, 0, 0, 121]
-list_final = [100,10,10,10,10,10,102,1002,10]
+    def action(self, action, times):
+        for i in range(times):
+            print('aa')
 
-kirito = character(list_start, list_extra)
 
-kirito.show()
+list_base   = [ 25,  3,  2,  2,  3,  6,  2,  1,  1] # 基礎值
+list_start  = [350, 38, 33, 30, 25, 20, 32, 25, 20] # 初始值
+list_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121] # 額外值
+list_exp    = [100, 10, 10, 10, 10, 10,102,104, 10]
+
+kirito = character(list_start, list_extra) # create a character
+
+kirito.show() # show character status
