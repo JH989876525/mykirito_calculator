@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 action_list = ['hunting','workout','picnic','dating','charity','sitdown','fishing','battleW','battleL','killing']
 exp_list    = [15,15,15,15,15,15,15,15,15,15]
@@ -45,21 +46,103 @@ class character:
             ### add to totalexp
             self.totalexp += exp_list[index]
             ###
-            self.level_check()
+            self.level_update()
 
-    def level_check(self):
-        if(self.totalexp >= leveling_exp_list[self.level]):
+    def level_update(self):
+        while(self.totalexp >= leveling_exp_list[self.level] and self.level < 70):
             print('level up')
-            if(self.level < 70):
-                self.level+=1
-            self.efforts=[0,0,0,0,0,0,0,0,0]
-			### calculate level up adding val
+            self.level+=1
+            ### base point
+            self.status = np.sum([self.status, self.base], axis = 0).tolist()
+			### floating point
+            self.floating_point()
 			### add val to status
+            ### clean efforts
+            self.efforts=[0,0,0,0,0,0,0,0,0]
+
+    def floating_point(self):
+        self.logtable()
+
+    def logtable(self):
+        bigtable=[]
+        log2efforts=[0,0,0,0,0,0,0,0,0]
+        log_efforts=[0,0,0,0,0,0,0,0,0]
+        for j in range(1,400):
+            for i in range(8):
+                if(self.efforts[i] > 0):
+                    log2efforts[i] = math.log2(self.efforts[i])
+                else:
+                    log2efforts[i] = -9999
+            ### sub the max val
+            result=[0,0,0,0,0,0,0,0,0]
+            for i in range(8):
+                log_efforts[i] = max(log2efforts)-log2efforts[i]
+            ### hp
+            if(log_efforts[0]>0):
+                result[0]=0
+            elif(log_efforts[0]==0):
+                result[0]=1
+            ### atk
+            if(log_efforts[0]==0):
+                result[1]=0
+            else:
+                if(log_efforts[1]>0):result[1]=0
+                else:result[1]=1
+            ### dfs
+            if(log_efforts[0]==0 or log_efforts[1]==0):
+                result[2]=0
+            else:
+                if(log_efforts[2]>0):result[2]=0
+                else:result[2]=1
+            ### str
+            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0):
+                result[3]=0
+            else:
+                if(log_efforts[3]>0):result[3]=0
+                else:result[3]=1
+            ### dex
+            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0):
+                result[4]=0
+            else:
+                if(log_efforts[4]>0):result[4]=0
+                else:result[4]=1
+            ### rac
+            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0 or log_efforts[4]==0):
+                result[5]=0
+            else:
+                if(log_efforts[5]>0):result[5]=0
+                else:result[5]=1
+            ### skl
+            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0 or log_efforts[4]==0 or log_efforts[5]==0):
+                result[6]=0
+            else:
+                if(log_efforts[6]>0):result[6]=0
+                else:result[6]=1
+            ### int
+            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0 or log_efforts[4]==0 or log_efforts[5]==0 or log_efforts[6]==0):
+                result[7]=0
+            else:
+                if(log_efforts[7]>0):result[7]=0
+                else:result[7]=1
+            ### luk
+            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0 or log_efforts[4]==0 or log_efforts[5]==0 or log_efforts[6]==0 or log_efforts[7]==0):
+                result[8]=0
+            else:
+                if(log_efforts[8]>0):result[8]=0
+                else:result[8]=1
+            ### append to bigtable
+            print(result)
+            # bigtable = np.append()
+
+
+
+
+
 
 ### initail your kirito
 val_base   = [ 25,  3,  2,  2,  3,  6,  2,  1,  1] # 基礎值
-val_start  = [350, 38, 33, 30, 25, 20,132,225, 20] # 初始值
-val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121] # 額外值
+val_start  = [350, 38, 33, 30, 25, 20, 32, 25, 20] # 初始值
+val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,  0] # 額外值
 
 kirito = character(val_base, val_start, val_extra)
 
@@ -67,6 +150,6 @@ kirito.show()
 
 
 ### start your kirito
-kirito.action('workout', 2)
+kirito.action('workout', 10)
 
 kirito.show() 
