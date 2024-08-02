@@ -54,85 +54,88 @@ class character:
             self.level+=1
             ### base point
             self.status = np.sum([self.status, self.base], axis = 0).tolist()
-			### floating point
+			### floating point calculation
             self.floating_point()
 			### add val to status
             ### clean efforts
             self.efforts=[0,0,0,0,0,0,0,0,0]
 
     def floating_point(self):
-        self.logtable()
-
-    def logtable(self):
-        bigtable=[]
-        log2efforts=[0,0,0,0,0,0,0,0,0]
-        log_efforts=[0,0,0,0,0,0,0,0,0]
+        inttable=[[]]
+        logtable=[[]]
         for j in range(1,400):
+            log2efforts=[0,0,0,0,0,0,0,0,0]
+            tmp_efforts=[0,0,0,0,0,0,0,0,0]
             for i in range(8):
-                if(self.efforts[i] > 0):
-                    log2efforts[i] = math.log2(self.efforts[i])
+                if(j==1):
+                    if(self.efforts[i] > 0):
+                        log2efforts[i] = math.log2(self.efforts[i])
+                    else:
+                        log2efforts[i] = -9999
                 else:
-                    log2efforts[i] = -9999
+                    log2efforts[i] = logtable[j-1][i] - inttable[j-1][i]
+            ### append logtable
+            logtable.append(log2efforts)
             ### sub the max val
-            result=[0,0,0,0,0,0,0,0,0]
+            result_effort=[0,0,0,0,0,0,0,0,0]
             for i in range(8):
-                log_efforts[i] = max(log2efforts)-log2efforts[i]
+                tmp_efforts[i] = max(log2efforts)-log2efforts[i]
             ### hp
-            if(log_efforts[0]>0):
-                result[0]=0
-            elif(log_efforts[0]==0):
-                result[0]=1
+            if(tmp_efforts[0]>0):
+                result_effort[0]=0
+            elif(tmp_efforts[0]==0):
+                result_effort[0]=1
             ### atk
-            if(log_efforts[0]==0):
-                result[1]=0
+            if(tmp_efforts[0]==0):
+                result_effort[1]=0
             else:
-                if(log_efforts[1]>0):result[1]=0
-                else:result[1]=1
+                if(tmp_efforts[1]>0):result_effort[1]=0
+                else:result_effort[1]=1
             ### dfs
-            if(log_efforts[0]==0 or log_efforts[1]==0):
-                result[2]=0
+            if(tmp_efforts[0]==0 or tmp_efforts[1]==0):
+                result_effort[2]=0
             else:
-                if(log_efforts[2]>0):result[2]=0
-                else:result[2]=1
+                if(tmp_efforts[2]>0):result_effort[2]=0
+                else:result_effort[2]=1
             ### str
-            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0):
-                result[3]=0
+            if(tmp_efforts[0]==0 or tmp_efforts[1]==0 or tmp_efforts[2]==0):
+                result_effort[3]=0
             else:
-                if(log_efforts[3]>0):result[3]=0
-                else:result[3]=1
+                if(tmp_efforts[3]>0):result_effort[3]=0
+                else:result_effort[3]=1
             ### dex
-            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0):
-                result[4]=0
+            if(tmp_efforts[0]==0 or tmp_efforts[1]==0 or tmp_efforts[2]==0 or tmp_efforts[3]==0):
+                result_effort[4]=0
             else:
-                if(log_efforts[4]>0):result[4]=0
-                else:result[4]=1
+                if(tmp_efforts[4]>0):result_effort[4]=0
+                else:result_effort[4]=1
             ### rac
-            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0 or log_efforts[4]==0):
-                result[5]=0
+            if(tmp_efforts[0]==0 or tmp_efforts[1]==0 or tmp_efforts[2]==0 or tmp_efforts[3]==0 or tmp_efforts[4]==0):
+                result_effort[5]=0
             else:
-                if(log_efforts[5]>0):result[5]=0
-                else:result[5]=1
+                if(tmp_efforts[5]>0):result_effort[5]=0
+                else:result_effort[5]=1
             ### skl
-            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0 or log_efforts[4]==0 or log_efforts[5]==0):
-                result[6]=0
+            if(tmp_efforts[0]==0 or tmp_efforts[1]==0 or tmp_efforts[2]==0 or tmp_efforts[3]==0 or tmp_efforts[4]==0 or tmp_efforts[5]==0):
+                result_effort[6]=0
             else:
-                if(log_efforts[6]>0):result[6]=0
-                else:result[6]=1
+                if(tmp_efforts[6]>0):result_effort[6]=0
+                else:result_effort[6]=1
             ### int
-            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0 or log_efforts[4]==0 or log_efforts[5]==0 or log_efforts[6]==0):
-                result[7]=0
+            if(tmp_efforts[0]==0 or tmp_efforts[1]==0 or tmp_efforts[2]==0 or tmp_efforts[3]==0 or tmp_efforts[4]==0 or tmp_efforts[5]==0 or tmp_efforts[6]==0):
+                result_effort[7]=0
             else:
-                if(log_efforts[7]>0):result[7]=0
-                else:result[7]=1
+                if(tmp_efforts[7]>0):result_effort[7]=0
+                else:result_effort[7]=1
             ### luk
-            if(log_efforts[0]==0 or log_efforts[1]==0 or log_efforts[2]==0 or log_efforts[3]==0 or log_efforts[4]==0 or log_efforts[5]==0 or log_efforts[6]==0 or log_efforts[7]==0):
-                result[8]=0
+            if(tmp_efforts[0]==0 or tmp_efforts[1]==0 or tmp_efforts[2]==0 or tmp_efforts[3]==0 or tmp_efforts[4]==0 or tmp_efforts[5]==0 or tmp_efforts[6]==0 or tmp_efforts[7]==0):
+                result_effort[8]=0
             else:
-                if(log_efforts[8]>0):result[8]=0
-                else:result[8]=1
-            ### append to bigtable
-            print(result)
-            # bigtable = np.append()
+                if(tmp_efforts[8]>0):result_effort[8]=0
+                else:result_effort[8]=1
+            ### append to inttable
+            inttable.append(result_effort)
+        ### sum of the inttable
 
 
 
