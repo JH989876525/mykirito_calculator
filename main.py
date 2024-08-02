@@ -51,22 +51,31 @@ class character:
     def level_update(self):
         while(self.totalexp >= leveling_exp_list[self.level] and self.level < 70):
             print('level up')
-            self.level+=1
             ### base point
             self.status = np.sum([self.status, self.base], axis = 0).tolist()
+            ### getting floatpoint? 
+            point=self.floating_point_gain()
 			### floating point calculation
-            self.floating_point()
+            if(point!=0):
+                self.floating_point(point)
 			### add val to status
-            ### clean efforts
+            ### reset efforts & update level
             self.efforts=[0,0,0,0,0,0,0,0,0]
+            self.level+=1
 
-    def floating_point(self):
+    def floating_point_gain(self):
+        currentlevel=self.level
+        finishlevel=currentlevel+1
+        point_gain = math.floor((finishlevel+1)/7) * (finishlevel+1-math.floor((finishlevel+1)/7)*7/2-7/2) - math.floor((currentlevel+1)/7) * (currentlevel+1-math.floor((currentlevel+1)/7)*7/2-7/2)
+        return point_gain
+
+    def floating_point(self, point:int):
         inttable=[[]]
         logtable=[[]]
         for j in range(1,400):
             log2efforts=[0,0,0,0,0,0,0,0,0]
             tmp_efforts=[0,0,0,0,0,0,0,0,0]
-            for i in range(8):
+            for i in range(9):
                 if(j==1):
                     if(self.efforts[i] > 0):
                         log2efforts[i] = math.log2(self.efforts[i])
@@ -78,7 +87,7 @@ class character:
             logtable.append(log2efforts)
             ### sub the max val
             result_effort=[0,0,0,0,0,0,0,0,0]
-            for i in range(8):
+            for i in range(9):
                 tmp_efforts[i] = max(log2efforts)-log2efforts[i]
             ### hp
             if(tmp_efforts[0]>0):
@@ -152,7 +161,13 @@ kirito = character(val_base, val_start, val_extra)
 kirito.show() 
 
 
-### start your kirito
-kirito.action('workout', 10)
+# ### start your kirito
+# kirito.action('workout', 18)
 
-kirito.show() 
+# kirito.show() 
+
+### test level 6 to 7
+kirito.level=6
+kirito.totalexp = 245
+kirito.action('workout', 1)
+kirito.show()
