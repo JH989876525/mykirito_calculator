@@ -66,11 +66,15 @@ class character:
             ### base point
             self.status = np.sum([self.status, self.base], axis = 0).tolist()
             ### getting floatpoint? 
-            point=self.floating_point_gain()
+            point_add=self.floating_point_gain()
 			### floating point calculation
-            if point!=0:
-                float_pos = self.floating_point_add(point)
+            if point_add!=0:
                 float_neg = self.floating_point_sub()
+                point_sub=0
+                for i in range(9):
+                    if float_neg[i]<0:
+                        point_sub+=float_neg[i]
+                float_pos = self.floating_point_add(point_add - point_sub)
                 float_sum = [0,0,0,0,0,0,0,0,0]
                 for i in range(9):
                     if self.efforts[i]>0:
@@ -78,7 +82,7 @@ class character:
                     else:
                         float_sum[i]=float_neg[i]
                 ### add to float
-                # print('\tlevel up', self.level, point, float_pos, float_neg)
+                # print('\tlevel up', self.level, point_add, point_sub, float_pos, float_neg, float_sum)
                 self.float = np.sum([self.float, float_sum], axis = 0).tolist()
             ### reset efforts & update level at the end of this function
             self.efforts=[0,0,0,0,0,0,0,0,0]
@@ -241,15 +245,15 @@ if __name__ == "__main__":
 
     ### sitdown to 49 & reset efforts for 10 times action test
     kirito.action('sitdown', 1334)
-    kirito.show()
+    # kirito.show()
     kirito.action('sitdown', 65)
-    kirito.show()
+    # kirito.show()
     kirito.action('sitdown', 1)
     # float should be [3,-3,3,-2,0,0,2,4,0]
     kirito.show()
     kirito.radar_chart(300)
 
-    ### kirito_sitdown_to_50_should_be [2255,84,182,51,182,336,179,204,64]
+    ### kirito_sitdown_to_50_should_be [2255, 84,182,51,182,336,179,204, 64]
 
     # ### xmas cirika charity only
     # val_base   = [ 55,  1,  3,  3,  3,  2,  3,  1,  5] # 基礎值
