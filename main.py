@@ -14,7 +14,7 @@ effort_point = [
     [ 0, 2, 1, 1, 2, 0, 1, 0, 0],
     [ 3,-1, 3, 1, 0, 1, 0, 2, 1],
     [-1, 3,-1,-1, 2,-1, 2, 0,-1]]
-leveling_exp_list = [0, 30, 60, 100, 150, 200, 250, 300, 370, 450, 500, 650, 800, 950, 1200, 1450, 1700, 1950, 2200, 2500, 2800, 3100, 3400, 3700, 4000, 4400, 4800, 5200, 5600, 6000, 6500, 7000, 7500, 8000, 8500, 9100, 9700, 10300, 11000, 11800, 12600, 13500, 14400, 15300, 16200, 17100, 18000, 19000, 20000, 21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000, 37000, 39000, 41000, 44000, 47000, 50000, 53000, 56000, 59000, 62000, 65000, 68000, 71000,0,0,0,0]
+leveling_exp_list = [0, 30, 60, 100, 150, 200, 250, 300, 370, 450, 500, 650, 800, 950, 1200, 1450, 1700, 1950, 2200, 2500, 2800, 3100, 3400, 3700, 4000, 4400, 4800, 5200, 5600, 6000, 6500, 7000, 7500, 8000, 8500, 9100, 9700, 10300, 11000, 11800, 12600, 13500, 14400, 15300, 16200, 17100, 18000, 19000, 20000, 21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000, 37000, 39000, 41000, 44000, 47000, 50000, 53000, 56000, 59000, 62000, 65000, 68000, 71000]
 
 class character:
     def __init__(self,val_base,val_start,val_extra):
@@ -33,9 +33,7 @@ class character:
                 result[i] = self.status[i] + self.extra[i]*10 + self.float[i]*10
             else:
                 result[i] = self.status[i] + self.extra[i] + self.float[i]
-                
-        # result = np.sum([self.status, self.extra], axis = 0).tolist()
-        # result = np.sum([result, self.float], axis = 0).tolist()
+
         print("Level\t:", self.level, ", TotalExp :", self.totalexp)
         print("extra\t:", self.extra)
         print("float\t:", self.float)
@@ -63,17 +61,25 @@ class character:
 
     def level_update(self):
         while self.totalexp >= leveling_exp_list[self.level]:
-            print('level up', self.level, self.totalexp)
+            # print('\tlevel up', self.level, self.totalexp)
             ### base point
             self.status = np.sum([self.status, self.base], axis = 0).tolist()
             ### getting floatpoint? 
             point=self.floating_point_gain()
-			### floating point calculation & add
+			### floating point calculation
             if point!=0:
-                gain = self.floating_point_add(point)
-                self.float = np.sum([self.float, gain], axis = 0).tolist()
-			### add val to status
-            ### reset efforts & update level
+                float_pos = self.floating_point_add(point)
+                float_neg = self.floating_point_sub()
+                float_sum = [0,0,0,0,0,0,0,0,0]
+                for i in range(9):
+                    if self.efforts[i]>0:
+                        float_sum[i]=float_pos[i]
+                    else:
+                        float_sum[i]=float_neg[i]
+                ### add to float
+                # print('\tfloat', float_sum)
+                self.float = np.sum([self.float, float_sum], axis = 0).tolist()
+            ### reset efforts & update level at the end of this function
             self.efforts=[0,0,0,0,0,0,0,0,0]
             self.level+=1
             if self.level >= 70:
@@ -84,6 +90,27 @@ class character:
         finishlevel=currentlevel+1
         point_gain = math.floor((finishlevel+1)/7) * (finishlevel+1-math.floor((finishlevel+1)/7)*7/2-7/2) - math.floor((currentlevel+1)/7) * (currentlevel+1-math.floor((currentlevel+1)/7)*7/2-7/2)
         return point_gain
+
+    def floating_point_sub(self):
+        float_sum=[0,0,0,0,0,0,0,0,0]
+        currentlevel=self.level
+        finishlevel=currentlevel+1
+        levelupped=finishlevel-currentlevel
+        tmpa = 6-currentlevel if(6-currentlevel>0) else 0
+        tmpb = 6-finishlevel if(6-finishlevel>0) else 0
+        unsubbale= tmpa-tmpb
+        for i in range(9):
+            if(i==0):
+                if(math.floor(self.efforts[i]/10)+self.base[i]*levelupped > unsubbale*self.base[i]):
+                    float_sum[i] = math.floor(self.efforts[i]/10)
+                else:
+                    float_sum[i] = unsubbale*self.base[i] - self.base[i]*levelupped
+            else:
+                if(math.floor(self.efforts[i]/10)+levelupped > unsubbale*self.base[i]):
+                    float_sum[i] = math.floor(self.efforts[i]/10)
+                else:
+                    float_sum[i] = unsubbale*self.base[i] - levelupped
+        return float_sum
 
     def floating_point_add(self, point:int):
         inttable=[[]]
@@ -182,12 +209,10 @@ kirito = character(val_base, val_start, val_extra)
 
 kirito.show() 
 
+### workout to 49 & reset efforts for 10 times action test
+kirito.action('sitdown', 1390)
+kirito.efforts=[0,0,0,0,0,0,0,0,0]
+kirito.show()
 
-# ### start your kirito
-# kirito.action('workout', 18)
-
-# kirito.show() 
-
-### test level 6 to 7
-kirito.action('workout', 500)
+kirito.action('sitdown', 10)
 kirito.show()
