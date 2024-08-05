@@ -1,5 +1,7 @@
 import numpy as np
 import math
+import pygal
+from pygal.style import Style
 
 action_list = ['hunting','workout','picnic','dating','charity','sitdown','fishing','battleW','battleL','killing']
 exp_list    = [15,15,15,15,15,15,15,15,15,15]
@@ -196,6 +198,39 @@ class character:
         ### sum of the inttable
         return float_sum
 
+    def radar_chart(self,max:int=500):
+        ### get vals
+        feature=['攻擊', '防禦', '體力', '敏捷', '反應', '技巧', '智力', '幸運']
+        result_sum=[0,0,0,0,0,0,0,0]
+        result_base=[0,0,0,0,0,0,0,0]
+        result_float=[0,0,0,0,0,0,0,0]
+        result_hp = self.status[0] + self.extra[0]*10 + self.float[0]*10
+        for i in range(8):
+            result_sum[i] = self.status[i+1] + self.float[i+1] + self.extra[i+1]
+            result_float[i] = self.status[i+1] + self.float[i+1] 
+            result_base[i] = self.status[i+1]
+
+        ### setting up the radar_chart
+        custom_style = Style(
+            background='white',
+            plot_background='white',
+            foreground='#000000',
+            foreground_strong='#000000',
+            foreground_subtle='#630C0D',
+            colors=('#0800E8CC', '#9BC850CC', '#404040CC', '#FAB243CC', '#E853A0CC', '#E8537ACC')
+        )
+        radar_chart = pygal.Radar(fill = True, range=(0,max), style=custom_style)
+        radar_chart.title = 'HP:' + str(result_hp) + '=' + str(self.status[0]) + '+' + str(self.float[0]*10) + '+' + str(self.extra[0]*10)
+        radar_chart.x_labels = feature
+
+        ### draw
+        radar_chart.add('sum', result_sum)
+        radar_chart.add('float', result_float)
+        # radar_chart.add('base', result_base)
+
+        ### save
+        radar_chart.render_to_file('radar_chart.svg')
+
 ### start your kirito here
 if __name__ == "__main__":
     ### initial your kirito
@@ -214,3 +249,5 @@ if __name__ == "__main__":
 
     kirito.action('sitdown', 10)
     kirito.show()
+
+    kirito.radar_chart(300)
