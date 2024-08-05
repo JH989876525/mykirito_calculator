@@ -196,23 +196,21 @@ class character:
         ### sum of the inttable
         return float_sum
 
+### start your kirito here
+if __name__ == "__main__":
+    ### initial your kirito
+    val_base   = [ 25,  3,  2,  2,  3,  6,  2,  1,  1] # 基礎值
+    val_start  = [350, 38, 33, 30, 25, 20, 32, 25, 20] # 初始值
+    val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121] # 額外值
 
+    kirito = character(val_base, val_start, val_extra)
 
+    kirito.show() 
 
+    ### workout to 49 & reset efforts for 10 times action test
+    kirito.action('sitdown', 1390)
+    kirito.efforts=[0,0,0,0,0,0,0,0,0]
+    kirito.show()
 
-### initail your kirito
-val_base   = [ 25,  3,  2,  2,  3,  6,  2,  1,  1] # 基礎值
-val_start  = [350, 38, 33, 30, 25, 20, 32, 25, 20] # 初始值
-val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121] # 額外值
-
-kirito = character(val_base, val_start, val_extra)
-
-kirito.show() 
-
-### workout to 49 & reset efforts for 10 times action test
-kirito.action('sitdown', 1390)
-kirito.efforts=[0,0,0,0,0,0,0,0,0]
-kirito.show()
-
-kirito.action('sitdown', 10)
-kirito.show()
+    kirito.action('sitdown', 10)
+    kirito.show()
