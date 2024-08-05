@@ -202,13 +202,13 @@ class character:
         ### get vals
         feature=['攻擊', '防禦', '體力', '敏捷', '反應', '技巧', '智力', '幸運']
         result_sum=[0,0,0,0,0,0,0,0]
-        result_base=[0,0,0,0,0,0,0,0]
+        result_default=[0,0,0,0,0,0,0,0]
         result_float=[0,0,0,0,0,0,0,0]
         result_hp = self.status[0] + self.extra[0]*10 + self.float[0]*10
         for i in range(8):
             result_sum[i] = self.status[i+1] + self.float[i+1] + self.extra[i+1]
             result_float[i] = self.status[i+1] + self.float[i+1] 
-            result_base[i] = self.status[i+1]
+            result_default[i] = self.status[i+1]
 
         ### setting up the radar_chart
         custom_style = Style(
@@ -217,7 +217,7 @@ class character:
             foreground='#000000',
             foreground_strong='#000000',
             foreground_subtle='#630C0D',
-            colors=('#0800E8CC', '#9BC850CC', '#404040CC', '#FAB243CC', '#E853A0CC', '#E8537ACC')
+            colors=('#0800E8CC', '#9BC850CC', '#FAB243CC', '#404040CC', '#E853A0CC', '#E8537ACC')
         )
         radar_chart = pygal.Radar(fill = True, range=(0,max), style=custom_style)
         radar_chart.title = 'HP:' + str(result_hp) + '=' + str(self.status[0]) + '+' + str(self.float[0]*10) + '+' + str(self.extra[0]*10)
@@ -226,7 +226,7 @@ class character:
         ### draw
         radar_chart.add('sum', result_sum)
         radar_chart.add('float', result_float)
-        # radar_chart.add('base', result_base)
+        radar_chart.add('default', result_default)
 
         ### save
         radar_chart.render_to_file('radar_chart.svg')
