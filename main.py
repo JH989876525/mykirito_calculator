@@ -63,7 +63,6 @@ class character:
 
     def level_update(self):
         while self.totalexp >= leveling_exp_list[self.level]:
-            # print('\tlevel up', self.level, self.totalexp)
             ### base point
             self.status = np.sum([self.status, self.base], axis = 0).tolist()
             ### getting floatpoint? 
@@ -79,7 +78,7 @@ class character:
                     else:
                         float_sum[i]=float_neg[i]
                 ### add to float
-                # print('\tfloat', float_sum)
+                # print('\tlevel up', self.level, point, float_pos, float_neg)
                 self.float = np.sum([self.float, float_sum], axis = 0).tolist()
             ### reset efforts & update level at the end of this function
             self.efforts=[0,0,0,0,0,0,0,0,0]
@@ -111,7 +110,7 @@ class character:
                 if(math.floor(self.efforts[i]/10)+levelupped > unsubbale*self.base[i]):
                     float_sum[i] = math.floor(self.efforts[i]/10)
                 else:
-                    float_sum[i] = unsubbale*self.base[i] - levelupped
+                    float_sum[i] = unsubbale*self.base[i] - self.base[i]
         return float_sum
 
     def floating_point_add(self, point:int):
@@ -240,14 +239,26 @@ if __name__ == "__main__":
 
     kirito = character(val_base, val_start, val_extra)
 
-    kirito.show() 
-
-    ### workout to 49 & reset efforts for 10 times action test
-    kirito.action('sitdown', 1390)
-    kirito.efforts=[0,0,0,0,0,0,0,0,0]
+    ### sitdown to 49 & reset efforts for 10 times action test
+    kirito.action('sitdown', 1334)
     kirito.show()
-
-    kirito.action('sitdown', 10)
+    kirito.action('sitdown', 65)
     kirito.show()
-
+    kirito.action('sitdown', 1)
+    # float should be [3,-3,3,-2,0,0,2,4,0]
+    kirito.show()
     kirito.radar_chart(300)
+
+    ### kirito_sitdown_to_50_should_be [2255,84,182,51,182,336,179,204,64]
+
+    # ### xmas cirika charity only
+    # val_base   = [ 55,  1,  3,  3,  3,  2,  3,  1,  5] # 基礎值
+    # val_start  = [450, 12, 28, 30, 32, 25, 20, 25, 35] # 初始值
+    # val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121] # 額外值
+    # xmascirika = character(val_base, val_start, val_extra)
+    # xmascirika.action('charity',300)
+    # xmascirika.show()
+    ### verify [1825, 37, 103, 105, 107, 88, 95, 56, 301] correct
+    # xmascirika.action('charity',500)
+    # xmascirika.show()
+    # xmascirika.radar_chart(400)
