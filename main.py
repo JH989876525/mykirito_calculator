@@ -273,5 +273,5 @@ def unittest():
 
 ### start your kirito here
 if __name__ == "__main__":
-    print("link start!")
+    print("リンクスタート！")
     unittest()
