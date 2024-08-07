@@ -237,39 +237,38 @@ class character:
         ### save
         radar_chart.render_to_file('radar_chart.svg')
 
+class unittest:
+    def __init__(self):
+        self.ut_kirito_sitdown_1400()
+        self.ut_xmascirika_charity_300()
 
-def ut_kirito_sitdown_1400():
-    ### initial
-    val_base   = [ 25,  3,  2,  2,  3,  6,  2,  1,  1]
-    val_start  = [250, 27, 22, 23, 35, 42, 30, 25, 15]
-    val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121]
-    kirito = character(val_base, val_start, val_extra)
+    def ut_kirito_sitdown_1400(self):
+        ### initial
+        val_base   = [ 25,  3,  2,  2,  3,  6,  2,  1,  1]
+        val_start  = [250, 27, 22, 23, 35, 42, 30, 25, 15]
+        val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121]
+        kirito = character(val_base, val_start, val_extra)
 
-    ### actions & calculate result
-    kirito.action('sitdown', 1400)
-    result=kirito.show(False)
-    
-    ### assert result
-    assert result == [2255, 84,182,51,182,336,179,204,185], 'kirito sitdown to 50 level calculation failed'
+        ### actions & calculate result
+        kirito.action('sitdown', 1400)
+        result=kirito.show(False)
+        
+        ### assert result
+        assert result == [2255, 84,182,51,182,336,179,204,185], 'kirito sitdown to 50 level calculation failed'
 
-def ut_xmascirika_charity_300():
-    ### initial
-    val_base   = [ 55,  1,  3,  3,  3,  2,  3,  1,  5] # 基礎值
-    val_start  = [450, 12, 28, 30, 32, 25, 20, 25, 35] # 初始值
-    val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121] # 額外值
-    xmascirika = character(val_base, val_start, val_extra)
+    def ut_xmascirika_charity_300(self):
+        ### initial
+        val_base   = [ 55,  1,  3,  3,  3,  2,  3,  1,  5] # 基礎值
+        val_start  = [450, 12, 28, 30, 32, 25, 20, 25, 35] # 初始值
+        val_extra  = [  0,  0,  0,  0,  0,  0,  0,  0,121] # 額外值
+        xmascirika = character(val_base, val_start, val_extra)
 
-    ### actions & calculate result
-    xmascirika.action('charity',300)
-    result=xmascirika.show(False)
+        ### actions & calculate result
+        xmascirika.action('charity',300)
+        result=xmascirika.show(False)
 
-    ### assert result
-    assert result == [1825, 37, 103, 105, 107, 88, 95, 56, 301], 'kirito charity to 26 level calculation failed'
-
-def unittest():
-    ut_kirito_sitdown_1400()
-    ut_xmascirika_charity_300()
-
+        ### assert result
+        assert result == [1825, 37, 103, 105, 107, 88, 95, 56, 301], 'kirito charity to 26 level calculation failed'
 
 ### start your kirito here
 if __name__ == "__main__":
